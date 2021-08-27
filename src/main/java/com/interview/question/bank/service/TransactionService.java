@@ -62,7 +62,7 @@ public class TransactionService {
 
     private void handleInvalidDepositAmount(double depositAmount) {
         if (depositAmount < 1 || depositAmount > 1000000)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can not deposit an amount of below #1 and above #1000000");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can not deposit an amount below #1 and above #1000000");
     }
 
     private TransactionHistory getNewTransactionHistory(double depositAmount, Account accountInfo, String operation) {

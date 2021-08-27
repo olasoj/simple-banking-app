@@ -1,5 +1,6 @@
 package com.interview.question.bank.model.entity;
 
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -10,8 +11,9 @@ import java.util.Collections;
 
 
 @Component
+@NoArgsConstructor
 public class AccountPrincipal implements UserDetails, Serializable {
-    private final Account account;
+    private Account account;
 
     public AccountPrincipal(Account account) {
         this.account = account;

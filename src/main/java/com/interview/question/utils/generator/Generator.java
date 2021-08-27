@@ -11,7 +11,7 @@ public class Generator {
         long lastKey = 0;
         for (java.util.Map.Entry<String, T> entry : object.entrySet())
             lastKey = Long.parseLong(entry.getKey());
-        return String.format("%010d", lastKey);
+        return String.format("%010d", lastKey + 1);
     }
 
 }

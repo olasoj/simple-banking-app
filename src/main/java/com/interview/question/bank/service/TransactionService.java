@@ -46,7 +46,6 @@ public class TransactionService {
     }
 
     public String deposit(DepositRequest depositRequest) {
-        authService.authenticateUser(depositRequest.getAccountNumber(), depositRequest.getAccountPassword());
         double depositAmount = depositRequest.getAmount();
         var accountInfo = accountService.getAccount(depositRequest.getAccountNumber());
         double newBalance = accountInfo.getBalance() + depositAmount;

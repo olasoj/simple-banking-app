@@ -21,10 +21,6 @@ public class DepositRequest implements Serializable {
     @NotEmpty(message = "Account number is required")
     private String accountNumber;
 
-    @NotEmpty(message = "Account password is required")
-    @JsonProperty("accountPassword")
-    private String accountPassword;
-
     @NotNull(message = "Deposit amount is required")
     @JsonProperty("amount")
     private Double amount;

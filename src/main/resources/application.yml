@@ -1,0 +1,10 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+app:
+  jwt:
+    secret-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJEwH4vU587kpWskFgulb1m7sV85Jg75SSWdFoNYwPFitS/f35CWnhtRPmXLSretx4hhsl6olCCJHfQt9kqgNtMCAwEAAQ==
+    expire-length: 1200000

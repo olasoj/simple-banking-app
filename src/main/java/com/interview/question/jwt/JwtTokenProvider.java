@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Objects;
 
 @Component
 @AllArgsConstructor
@@ -49,8 +50,9 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) return bearerToken.replace("Bearer ", "");
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "wrong credentials");
+        if (Objects.isNull(bearerToken))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "wrong credentials");
+        return (bearerToken.startsWith("Bearer ")) ? bearerToken.replace("Bearer ", "") : bearerToken;
     }
 
     public boolean validateToken(String token) {

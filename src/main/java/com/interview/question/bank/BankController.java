@@ -2,6 +2,7 @@ package com.interview.question.bank;
 
 import com.interview.question.bank.model.dto.AccountDTO;
 import com.interview.question.bank.model.dto.TransactionHistoryDTO;
+import com.interview.question.bank.model.entity.AccountPrincipal;
 import com.interview.question.bank.model.request.AccountCreationRequest;
 import com.interview.question.bank.model.request.DepositRequest;
 import com.interview.question.bank.model.request.WithdrawRequest;
@@ -12,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,7 +34,7 @@ public class BankController {
     }
 
     @GetMapping(value = "account_statement/{accountNumber}")
-    public ResponseEntity<List<TransactionHistoryDTO>> accountStatement(@PathVariable(value = "accountNumber") String accountNumber, @AuthenticationPrincipal UserDetails userPrincipal
+    public ResponseEntity<List<TransactionHistoryDTO>> accountStatement(@PathVariable(value = "accountNumber") String accountNumber, @AuthenticationPrincipal AccountPrincipal accountPrincipal
     ) {
         List<TransactionHistoryDTO> accountStatement = bankService.getAccountStatement(accountNumber);
         return ResponseEntity.ok().body(accountStatement);

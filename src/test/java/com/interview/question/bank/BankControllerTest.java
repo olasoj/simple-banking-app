@@ -21,6 +21,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -59,6 +63,7 @@ class BankControllerTest {
                 .andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        verify(accountService, times(1)).getAccountInfo(anyString());
 
     }
 
@@ -70,6 +75,7 @@ class BankControllerTest {
                 .andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        verify(accountService, times(1)).getAccountStatement(anyString());
     }
 
     @Test
@@ -82,6 +88,7 @@ class BankControllerTest {
                                 write.getJson())).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        verify(accountService, times(1)).createAccount(any());
     }
 
     @Test
@@ -94,6 +101,7 @@ class BankControllerTest {
                                 write.getJson())).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        verify(transactionService, times(1)).withdraw(any());
     }
 
     @Test
@@ -106,5 +114,6 @@ class BankControllerTest {
                                 write.getJson())).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        verify(transactionService, times(1)).deposit(any());
     }
 }

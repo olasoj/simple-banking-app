@@ -21,6 +21,13 @@ import java.util.Objects;
 public class ResponseModel {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseModel.class);
 
+    public  static void responseValidationError( HttpServletResponse response, Map<Object, Object> errors, String message, HttpStatus status) {
+        Map<String, Object> responseMessage = getResponseBody(status, message, null);
+
+        responseMessage.put("errors", errors);
+        responseConfig(response, status, responseMessage);
+    }
+
     public static Map<String, Object> responseWithAdditionalObject(HttpStatus status, String messageName, Object message) {
         Map<String, Object> responseMessage = getResponseBody(status, null, null);
         responseMessage.put(messageName, message);

@@ -35,9 +35,9 @@ class TransactionServiceTest {
 
     @Test
     void withdraw() {
-        String accountNumber = mockGetAccount();
-        var withdrawRequest = new WithdrawRequest(accountNumber, "less", (double) 98);
-        mockUpdateAccount();
+        var account = mockGetAccount();
+        var withdrawRequest = new WithdrawRequest(account.getAccountNumber(), "less", (double) 98);
+        mockUpdateAccount(account);
         doNothing().when(transactionHistoryRepository).save(any(), any());
 
         transactionService.withdraw(withdrawRequest);
@@ -46,30 +46,27 @@ class TransactionServiceTest {
 
     @Test
     void deposit() {
-        String accountNumber = mockGetAccount();
-        var depositRequest = new DepositRequest(accountNumber, 100.0);
+        var account = mockGetAccount();
+        var depositRequest = new DepositRequest(account.getAccountNumber(), 100.0);
 
-        mockUpdateAccount();
+        mockUpdateAccount(account);
         doNothing().when(transactionHistoryRepository).save(any(), any());
 
         transactionService.deposit(depositRequest);
         verify(transactionHistoryRepository, times(1)).save(any(), any());
     }
 
-    private String mockGetAccount() {
+    private void mockUpdateAccount(Account account) {
+        doNothing().when(accountService).updateAccount(account);
+    }
+
+    private Account mockGetAccount() {
         String accountNumber = "00000001";
         var accountCreationRequest = new AccountCreationRequest("Rob", "less", (double) 799);
 
         var account = new Account(accountCreationRequest, accountNumber);
         when(accountService.getAccount(accountNumber)).thenReturn((account));
-        return accountNumber;
+        return account;
     }
 
-    private void mockUpdateAccount() {
-        String accountNumber = "00000001";
-        var accountCreationRequest = new AccountCreationRequest("Rob", "less", (double) 799);
-
-        var account = new Account(accountCreationRequest, accountNumber);
-        doNothing().when(accountService).updateAccount(account);
-    }
 }

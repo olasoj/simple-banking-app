@@ -43,7 +43,7 @@ public class BankController {
     @PostMapping(value = "create_account")
     public ResponseEntity<Map<String, Object>> createAccount(@Valid @RequestBody AccountCreationRequest accountCreationRequest) {
         String accountCreationMessage = bankService.createAccount(accountCreationRequest);
-        Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.CREATED, accountCreationMessage, null);
+        Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.OK, accountCreationMessage, null);
         return ResponseEntity.ok().body(genericResponseModel);
     }
 

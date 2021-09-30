@@ -13,8 +13,7 @@ public class PerfectSquareCount {
             n = temp;
         }
 
-        return m * (m + 1) * (2 * m + 1) /
-                6 + (n - m) * m * (m + 1) / 2;
+        return (m * (m + 1) * ((2 * m) + 1 + 3 * (n - m))) / 6;
     }
 
     static void executeTests(int testCases, Scanner input, List<Integer> results) {

@@ -7,4 +7,4 @@ server:
 app:
   jwt:
     secret-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJEwH4vU587kpWskFgulb1m7sV85Jg75SSWdFoNYwPFitS/f35CWnhtRPmXLSretx4hhsl6olCCJHfQt9kqgNtMCAwEAAQ==
-    expire-length: 1200000
+    expire-length: 120000000

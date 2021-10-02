@@ -19,7 +19,7 @@ public class AccountDTO implements Serializable {
     @JsonProperty("accountName")
     private String accountName;
 
-    @JsonProperty("accountPassword")
+    @JsonProperty("accountNumber")
     private String accountNumber;
 
     @JsonProperty("balance")

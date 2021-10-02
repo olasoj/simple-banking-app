@@ -24,7 +24,7 @@ public class WithdrawRequest implements Serializable {
     private String accountNumber;
     @NotEmpty(message = "Account password is required")
     private String accountPassword;
-    @JsonProperty("withdrawnAmount")
+    @JsonProperty("withdrawAmount")
     @NotNull(message = "Withdraw amount is required")
     private Double withdrawAmount;
 }

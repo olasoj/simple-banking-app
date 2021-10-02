@@ -4,12 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 public class TransactionHistory implements Serializable {
-    private LocalDate transactionDate = LocalDate.now();
+    private LocalDateTime transactionDate = LocalDateTime.now();
     private String transactionType;
     private Double amount;
     private String narration;

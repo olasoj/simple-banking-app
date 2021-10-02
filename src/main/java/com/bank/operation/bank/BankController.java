@@ -26,17 +26,17 @@ public class BankController {
     private AccountService bankService;
     private TransactionService transactionService;
 
-    @GetMapping(value = "account_info/{accountNumber}")
-    public ResponseEntity<Map<String, Object>> accountInfo(@PathVariable(value = "accountNumber") String accountNumber// @AuthenticationPrincipal UserDetails userPrincipal,
+    @GetMapping(value = "account/info/me")
+    public ResponseEntity<Map<String, Object>> accountInfo(@AuthenticationPrincipal AccountPrincipal accountPrincipal
     ) {
-        AccountDTO accountInfo = bankService.getAccountInfo(accountNumber);
-        return ResponseEntity.ok().body(ResponseModel.responseWithAdditionalObject(HttpStatus.OK, "account", accountInfo));
+        AccountDTO accountInfo = bankService.getAccountInfo(accountPrincipal.getAccountNumber());
+        return ResponseEntity.ok().body(ResponseModel.getResponseBody(HttpStatus.OK,  accountInfo, "account"));
     }
 
-    @GetMapping(value = "account_statement/{accountNumber}")
-    public ResponseEntity<List<TransactionHistoryDTO>> accountStatement(@PathVariable(value = "accountNumber") String accountNumber, @AuthenticationPrincipal AccountPrincipal accountPrincipal
+    @GetMapping(value = "account/statement/me")
+    public ResponseEntity<List<TransactionHistoryDTO>> accountStatement(@AuthenticationPrincipal AccountPrincipal accountPrincipal
     ) {
-        List<TransactionHistoryDTO> accountStatement = bankService.getAccountStatement(accountNumber);
+        List<TransactionHistoryDTO> accountStatement = bankService.getAccountStatement(accountPrincipal.getAccountNumber());
         return ResponseEntity.ok().body(accountStatement);
     }
 
@@ -44,17 +44,17 @@ public class BankController {
     public ResponseEntity<Map<String, Object>> createAccount(@Valid @RequestBody AccountCreationRequest accountCreationRequest) {
         String accountCreationMessage = bankService.createAccount(accountCreationRequest);
         Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.OK, accountCreationMessage, null);
-        return ResponseEntity.ok().body(genericResponseModel);
+        return ResponseEntity.status(201).body(genericResponseModel);
     }
 
-    @PostMapping(value = "/withdrawal")
+    @PostMapping(value = "transaction/withdrawal")
     public ResponseEntity<Map<String, Object>> withdraw(@Valid @RequestBody WithdrawRequest withdrawRequest) {
         String withdrawSuccessMessage = transactionService.withdraw(withdrawRequest);
         Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.OK, withdrawSuccessMessage, null);
         return ResponseEntity.ok().body(genericResponseModel);
     }
 
-    @PostMapping(value = "/deposit")
+    @PostMapping(value = "transaction/deposit")
     public ResponseEntity<Map<String, Object>> deposit(@Valid @RequestBody DepositRequest depositRequest) {
         String depositSuccessMsg = transactionService.deposit(depositRequest);
         Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.OK, depositSuccessMsg, null);

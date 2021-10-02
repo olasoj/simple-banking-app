@@ -12,6 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,27 +23,22 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResponseModel {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseModel.class);
+    private static final String RESPONSE_MESSAGE = "Failed to process response message";
 
-    public  static void responseValidationError( HttpServletResponse response, Map<Object, Object> errors, String message, HttpStatus status) {
+    public static void responseValidationError(HttpServletResponse response, Map<Object, Object> errors, String message, HttpStatus status) {
         Map<String, Object> responseMessage = getResponseBody(status, message, null);
-
         responseMessage.put("errors", errors);
         responseConfig(response, status, responseMessage);
     }
 
-    public static Map<String, Object> responseWithAdditionalObject(HttpStatus status, String messageName, Object message) {
-        Map<String, Object> responseMessage = getResponseBody(status, null, null);
-        responseMessage.put(messageName, message);
-        return responseMessage;
-    }
-
-    public static Map<String, Object> getResponseBody(HttpStatus status, String message, String messageKey) {
+    public static Map<String, Object> getResponseBody(HttpStatus status, Object message, String messageKey) {
         Map<String, Object> responseMessage = new HashMap<>();
 
         String resolvedMessageKey = Objects.isNull(messageKey) ? "message" : messageKey;
-        boolean success = status.value() >= 200 && status.value() < 299;
-        responseMessage.put("responseCode", status.value());
-        responseMessage.put("success", success);
+        var successful = (status.is2xxSuccessful());
+        responseMessage.put("timestamp", getTimeStamp());
+        responseMessage.put("status", status.value());
+        responseMessage.put("success", successful);
         responseMessage.put(resolvedMessageKey, message);
         return responseMessage;
     }
@@ -54,12 +52,17 @@ public class ResponseModel {
         try {
             var mapper = new ObjectMapper();
             response.setStatus(status.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=" + StandardCharsets.UTF_8.name());
             mapper.writeValue(response.getWriter(), responseMessage);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to generate response message");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, RESPONSE_MESSAGE);
         }
+    }
+
+    private static String getTimeStamp() {
+        var dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.now().format(dateTimeFormatter);
     }
 
 

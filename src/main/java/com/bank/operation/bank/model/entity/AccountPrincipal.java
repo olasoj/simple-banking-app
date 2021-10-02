@@ -24,6 +24,10 @@ public class AccountPrincipal implements UserDetails, Serializable {
         return Collections.emptyList();
     }
 
+    public String getAccountNumber() {
+        return account.getAccountNumber();
+    }
+
     @Override
     public String getPassword() {
         return account.getAccountPassword();

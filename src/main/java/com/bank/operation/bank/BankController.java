@@ -25,9 +25,9 @@ import java.util.Map;
 @RequestMapping("/")
 @AllArgsConstructor
 public class BankController {
-    private AccountService bankService;
-    private TransactionService transactionService;
-    private JwtTokenProvider jwtTokenProvider;
+    private final AccountService bankService;
+    private final TransactionService transactionService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping(value = "account/info/me")
     public ResponseEntity<Map<String, Object>> accountInfo(@AuthenticationPrincipal AccountPrincipal accountPrincipal

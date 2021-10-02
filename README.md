@@ -1,20 +1,17 @@
-
 ![Logo](https://i.postimg.cc/Prh7tGGn/simple-banking-app-logo.jpg)
 
-    
-# Banking Web Application.
+# Banking Web Application
 
 A Banking Web Application that simulates the day-to-day operations of a bank.
-
-
 
 ## Authors
 
 - [@olasoj](https://www.github.com/olasoj)
 
-  
 ## 🚀 About Me
-An analytical and solution-oriented computer scientist with significant practical and professional experience. Capable of motivating oneself and others. Passionate about programming and educating the next generation of technology consumers and innovators.  
+
+An analytical and solution-oriented computer scientist with significant practical and professional experience. Capable of motivating oneself and others. Passionate about programming and educating the next generation of technology consumers and innovators.
+
 ## Features
 
 **The following functionalities are available in this application:**
@@ -35,13 +32,11 @@ An analytical and solution-oriented computer scientist with significant practica
 
 - This system was built using the spring-boot framework with spring security, without a database, and following the best principles in software engineering.
 
-
-  
 ## Environment Variables
 
 This project made no use of environmental variables.
 
-  ## Run Locally
+## Run Locally
 
 Clone the project
 
@@ -61,16 +56,14 @@ Start the simple-banking-app
     mvn spring-boot:run
 ```
 
-  
 ## Documentation
 
 [Documentation](https://banking-api-doc.surge.sh/#account-create-account-post)
 
 [API](https://simple-banking-application.herokuapp.com/)
+
 ## Tech Stack
 
 **Client:** Postman
 
 **Server:** Java, Spring boot
-
-  

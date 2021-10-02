@@ -2,10 +2,10 @@ package com.bank.operation.bank;
 
 import com.bank.operation.bank.model.request.AccountCreationRequest;
 import com.bank.operation.bank.model.request.DepositRequest;
-import com.bank.operation.bank.service.AccountService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.bank.operation.bank.model.request.WithdrawRequest;
+import com.bank.operation.bank.service.AccountService;
 import com.bank.operation.bank.service.TransactionService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +58,7 @@ class BankControllerTest {
     @Test
     void accountInfo() throws Exception {
         MockHttpServletResponse response = mvc.perform(
-                        get("/account_info/00000001")
+                        get("/account/info/me")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -70,7 +70,7 @@ class BankControllerTest {
     @Test
     void accountStatement() throws Exception {
         MockHttpServletResponse response = mvc.perform(
-                        get("/account_statement/00000001")
+                        get("/account/statement/me")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -83,11 +83,11 @@ class BankControllerTest {
         var accountCreationRequest = new AccountCreationRequest("Rob", "less", (double) 0);
         JsonContent<AccountCreationRequest> write = accountCreationRequestJacksonTester.write(accountCreationRequest);
         MockHttpServletResponse response = mvc.perform(
-                post("/create_account").
+                post("/account/create").
                         contentType(MediaType.APPLICATION_JSON).content(
                                 write.getJson())).andReturn().getResponse();
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
         verify(accountService, times(1)).createAccount(any());
     }
 
@@ -96,7 +96,7 @@ class BankControllerTest {
         var withdrawRequest = new WithdrawRequest("Rob", "less", (double) 0);
         JsonContent<WithdrawRequest> write = withdrawRequestJacksonTester.write(withdrawRequest);
         MockHttpServletResponse response = mvc.perform(
-                post("/withdrawal").
+                post("/transaction/withdrawal").
                         contentType(MediaType.APPLICATION_JSON).content(
                                 write.getJson())).andReturn().getResponse();
 
@@ -109,7 +109,7 @@ class BankControllerTest {
         var depositRequest = new DepositRequest("Rob", 100.0);
         JsonContent<DepositRequest> write = depositRequestJacksonTester.write(depositRequest);
         MockHttpServletResponse response = mvc.perform(
-                post("/deposit").
+                post("/transaction/deposit").
                         contentType(MediaType.APPLICATION_JSON).content(
                                 write.getJson())).andReturn().getResponse();
 

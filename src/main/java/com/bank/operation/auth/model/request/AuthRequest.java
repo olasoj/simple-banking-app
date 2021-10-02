@@ -18,5 +18,5 @@ public class AuthRequest implements Serializable {
 
     @JsonProperty("accountPassword")
     @NotNull(message = "Account password is required")
-    private String password;
+    private String accountPassword;
 }

@@ -1,13 +1,13 @@
 package com.bank.operation.bank.service;
 
-import com.bank.operation.bank.repository.AccountRepository;
-import com.bank.operation.bank.repository.TransactionHistoryRepository;
 import com.bank.operation.bank.model.dto.AccountDTO;
 import com.bank.operation.bank.model.dto.TransactionHistoryDTO;
 import com.bank.operation.bank.model.entity.Account;
 import com.bank.operation.bank.model.entity.AccountPrincipal;
 import com.bank.operation.bank.model.entity.TransactionHistory;
 import com.bank.operation.bank.model.request.AccountCreationRequest;
+import com.bank.operation.bank.repository.AccountRepository;
+import com.bank.operation.bank.repository.TransactionHistoryRepository;
 import com.bank.operation.utils.generator.Generator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(newAccount);
 
         recordTransaction(initialDeposit, newAccount);
-        return "Account created successfully. Account number: " + newAccount.getAccountNumber();
+        return newAccount.getAccountNumber();
     }
 
     private void recordTransaction(double initialDeposit, Account newAccount) {

@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @AllArgsConstructor
@@ -70,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         configuration.setAllowCredentials(false);
 
+        configuration.setExposedHeaders(List.of("Authorization"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type",
                 "Access-Control-Allow-Origin", "origin", "accept"));
 

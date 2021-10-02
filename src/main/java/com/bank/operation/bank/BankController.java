@@ -1,13 +1,14 @@
 package com.bank.operation.bank;
 
-import com.bank.operation.bank.service.AccountService;
 import com.bank.operation.bank.model.dto.AccountDTO;
 import com.bank.operation.bank.model.dto.TransactionHistoryDTO;
 import com.bank.operation.bank.model.entity.AccountPrincipal;
 import com.bank.operation.bank.model.request.AccountCreationRequest;
 import com.bank.operation.bank.model.request.DepositRequest;
 import com.bank.operation.bank.model.request.WithdrawRequest;
+import com.bank.operation.bank.service.AccountService;
 import com.bank.operation.bank.service.TransactionService;
+import com.bank.operation.jwt.JwtTokenProvider;
 import com.bank.operation.utils.model.ResponseModel;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +27,13 @@ import java.util.Map;
 public class BankController {
     private AccountService bankService;
     private TransactionService transactionService;
+    private JwtTokenProvider jwtTokenProvider;
 
     @GetMapping(value = "account/info/me")
     public ResponseEntity<Map<String, Object>> accountInfo(@AuthenticationPrincipal AccountPrincipal accountPrincipal
     ) {
         AccountDTO accountInfo = bankService.getAccountInfo(accountPrincipal.getAccountNumber());
-        return ResponseEntity.ok().body(ResponseModel.getResponseBody(HttpStatus.OK,  accountInfo, "account"));
+        return ResponseEntity.ok().body(ResponseModel.getResponseBody(HttpStatus.OK, accountInfo, "account"));
     }
 
     @GetMapping(value = "account/statement/me")
@@ -41,8 +44,11 @@ public class BankController {
     }
 
     @PostMapping(value = "account/create")
-    public ResponseEntity<Map<String, Object>> createAccount(@Valid @RequestBody AccountCreationRequest accountCreationRequest) {
+    public ResponseEntity<Map<String, Object>> createAccount(@Valid @RequestBody AccountCreationRequest accountCreationRequest,
+                                                             HttpServletResponse response) {
         String accountCreationMessage = bankService.createAccount(accountCreationRequest);
+        String jwt = jwtTokenProvider.createJwt(accountCreationMessage);
+        response.setHeader("Authorization", jwt);
         Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.OK, accountCreationMessage, null);
         return ResponseEntity.status(201).body(genericResponseModel);
     }

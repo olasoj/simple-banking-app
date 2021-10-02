@@ -18,7 +18,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public String generateAuthCredentials(AuthRequest authRequest) {
-        authenticateUser(authRequest.getAccountNumber(), authRequest.getPassword());
+        authenticateUser(authRequest.getAccountNumber(), authRequest.getAccountPassword());
         return jwtTokenProvider.createJwt(authRequest.getAccountNumber());
     }
 

@@ -2,9 +2,8 @@ package com.bank.operation.security.config;
 
 import com.bank.operation.bank.service.AccountService;
 import com.bank.operation.jwt.JwtConfigurer;
-import com.bank.operation.jwt.JwtTokenProvider;
 import com.bank.operation.security.PasswordEncoder;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,14 +22,14 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableWebSecurity
 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccountService bankService;
     private final PasswordEncoder bCryptPasswordEncoder;
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtConfigurer jwtConfigurer;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -38,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and().csrf().disable().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .apply(new JwtConfigurer(jwtTokenProvider));
+                .apply(jwtConfigurer);
 
         http.authorizeRequests().anyRequest().permitAll();
     }

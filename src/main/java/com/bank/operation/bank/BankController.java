@@ -9,8 +9,10 @@ import com.bank.operation.bank.model.request.WithdrawRequest;
 import com.bank.operation.bank.service.AccountService;
 import com.bank.operation.bank.service.TransactionService;
 import com.bank.operation.jwt.JwtTokenProvider;
-import com.bank.operation.utils.model.ResponseModel;
+import com.bank.operation.utils.model.model.Response;
+import com.bank.operation.utils.model.transformer.ResponseAssembler;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -30,10 +31,11 @@ public class BankController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping(value = "account/info/me")
-    public ResponseEntity<Map<String, Object>> accountInfo(@AuthenticationPrincipal AccountPrincipal accountPrincipal
+    public ResponseEntity<Response<AccountDTO>> accountInfo(@AuthenticationPrincipal AccountPrincipal accountPrincipal
     ) {
         AccountDTO accountInfo = bankService.getAccountInfo(accountPrincipal.getAccountNumber());
-        return ResponseEntity.ok().body(ResponseModel.getResponseBody(HttpStatus.OK, accountInfo, "account"));
+        Response<AccountDTO> response = ResponseAssembler.toResponse(HttpStatus.OK, accountInfo);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping(value = "account/statement/me")
@@ -44,26 +46,28 @@ public class BankController {
     }
 
     @PostMapping(value = "account/create")
-    public ResponseEntity<Map<String, Object>> createAccount(@Valid @RequestBody AccountCreationRequest accountCreationRequest,
-                                                             HttpServletResponse response) {
+    public ResponseEntity<Response<String>> createAccount(@Valid @RequestBody AccountCreationRequest accountCreationRequest,
+                                                          HttpServletResponse httpServletResponse) {
         String accountCreationMessage = bankService.createAccount(accountCreationRequest);
         String jwt = jwtTokenProvider.createJwt(accountCreationMessage);
-        response.setHeader("Authorization", jwt);
-        Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.OK, accountCreationMessage, null);
-        return ResponseEntity.status(201).body(genericResponseModel);
+        httpServletResponse.setHeader(HttpHeaders.AUTHORIZATION, jwt);
+
+        Response<String> response = ResponseAssembler.toResponse(HttpStatus.OK, accountCreationMessage);
+        return ResponseEntity.status(201).body(response);
     }
 
     @PostMapping(value = "transaction/withdrawal")
-    public ResponseEntity<Map<String, Object>> withdraw(@Valid @RequestBody WithdrawRequest withdrawRequest) {
+    public ResponseEntity<Response<String>> withdraw(@Valid @RequestBody WithdrawRequest withdrawRequest) {
         String withdrawSuccessMessage = transactionService.withdraw(withdrawRequest);
-        Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.OK, withdrawSuccessMessage, null);
-        return ResponseEntity.ok().body(genericResponseModel);
+        Response<String> response = ResponseAssembler.toResponse(HttpStatus.OK, withdrawSuccessMessage);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping(value = "transaction/deposit")
-    public ResponseEntity<Map<String, Object>> deposit(@Valid @RequestBody DepositRequest depositRequest) {
+    public ResponseEntity<Response<String>> deposit(@Valid @RequestBody DepositRequest depositRequest) {
         String depositSuccessMsg = transactionService.deposit(depositRequest);
-        Map<String, Object> genericResponseModel = ResponseModel.getResponseBody(HttpStatus.OK, depositSuccessMsg, null);
-        return ResponseEntity.ok().body(genericResponseModel);
+        Response<String> response = ResponseAssembler.toResponse(HttpStatus.OK, depositSuccessMsg);
+        return ResponseEntity.ok().body(response);
     }
 }

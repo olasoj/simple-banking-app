@@ -9,7 +9,7 @@ import com.bank.operation.bank.model.request.AccountCreationRequest;
 import com.bank.operation.bank.repository.AccountRepository;
 import com.bank.operation.bank.repository.TransactionHistoryRepository;
 import com.bank.operation.utils.generator.Generator;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final TransactionHistoryRepository transactionHistoryRepository;

@@ -1,7 +1,8 @@
 package com.bank.operation.auth;
 
-import com.bank.operation.utils.model.ResponseModel;
 import com.bank.operation.auth.model.request.AuthRequest;
+import com.bank.operation.utils.model.model.Response;
+import com.bank.operation.utils.model.transformer.ResponseAssembler;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -20,7 +20,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(value = "login")
-    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody AuthRequest authRequest) {
-        return ResponseEntity.ok().body(ResponseModel.getResponseBody(HttpStatus.OK, authService.generateAuthCredentials(authRequest), "accessToken"));
+    public ResponseEntity<Response<String>> login(@Valid @RequestBody AuthRequest authRequest) {
+        String authCredentials = authService.generateAuthCredentials(authRequest);
+        Response<String> response = ResponseAssembler.toResponse(HttpStatus.OK, authCredentials);
+
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -9,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,7 +50,8 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
+
+        String bearerToken = req.getHeader(HttpHeaders.AUTHORIZATION);
         if (Objects.isNull(bearerToken))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "wrong credentials");
         return (bearerToken.startsWith("Bearer ")) ? bearerToken.replace("Bearer ", "") : bearerToken;

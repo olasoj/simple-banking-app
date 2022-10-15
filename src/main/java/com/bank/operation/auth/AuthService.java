@@ -1,8 +1,8 @@
 package com.bank.operation.auth;
 
-import com.bank.operation.jwt.JwtTokenProvider;
 import com.bank.operation.auth.model.request.AuthRequest;
-import lombok.AllArgsConstructor;
+import com.bank.operation.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
